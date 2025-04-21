@@ -125,7 +125,7 @@ gemini-healthcare-chatbot/
 
 ## 📬 Contact
 ``bash
-- 📧 Email: [gutsav449@gmail.com](mailto:aakashharwani06@gmail.com)
-- 💻 GitHub: [Utsavv1](https://github.com/aakash123254)
-- 🔗 LinkedIn: [Utsav Gupta](https://www.linkedin.com/in/aakash-harwani-453932222/)
+- 📧 Email: [aakashharwani06@gmail.com](mailto:aakashharwani06@gmail.com)
+- 💻 GitHub: [Aakash](https://github.com/aakash123254)
+- 🔗 LinkedIn: [Aakash Harwani](https://www.linkedin.com/in/aakash-harwani-453932222/)
 `
