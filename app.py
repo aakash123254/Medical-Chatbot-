@@ -108,22 +108,22 @@ def chatbot():
 
     return render_template("chatbot.html", user_info=user_info, chat_history=chat_history, language=language)
 
-# def translate_text(text, language_name):
-#     if not text or language_name == "english":
-#         return text
-#     try:
-#         lang_map = {
-#             "english": "en",
-#             "hindi": "hi",
-#             "gujarati": "gu",
-#             "marathi": "mr",
-#             "kannada": "kn"
-#         }
-#         language_code = lang_map.get(language_name.lower(), "en")
-#         return translator.translate(text, dest=language_code).text
-#     except Exception as e:
-#         print(f"Translation Error: {e}")
-#         return text
+def translate_text(text, language_name):
+    if not text or language_name == "english":
+        return text
+    try:
+        lang_map = {
+            "english": "en",
+            "hindi": "hi",
+            "gujarati": "gu",
+            "marathi": "mr",
+            "kannada": "kn"
+        }
+        language_code = lang_map.get(language_name.lower(), "en")
+        return translator.translate(text, dest=language_code).text
+    except Exception as e:
+        print(f"Translation Error: {e}")
+        return text
 
 @app.route("/disease-prediction", methods=["GET"])
 def disease_prediction():
