@@ -1,4 +1,4 @@
-# 🏥 Gemini Healthcare Chatbot
+# 🏥 Healthcare Chatbot
 
 
 The **SwasthyaFy Healthcare Chatbot** is an AI-powered web application built with **Python** and **Flask**, integrated with the **Google Gemini API** to identify possible diseases based on user-reported symptoms. This project is ideal for:
@@ -57,7 +57,7 @@ It simulates a realistic diagnostic conversation, predicts probable diseases, an
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/gemini-healthcare-chatbot.git
+git clone https://github.com/aakash123254/Medical-Chatbot-
 cd gemini-healthcare-chatbot
 ```
 
