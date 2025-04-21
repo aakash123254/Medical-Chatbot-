@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swasthyafy AI Chatbot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        /* General styling for the chat container */
+        .chat-container {
+            width: 900px;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            /* Full viewport height */
+            background-color: #f9f9f9;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Header styling */
+        header {
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        header p {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* Chat box styling */
+        .chat-box {
+            flex-grow: 1;
+            /* Takes up remaining space */
+            overflow-y: auto;
+            /* Enables scrolling if content overflows */
+            padding: 20px;
+            border-bottom: 1px solid #ddd;
+            background-color: #ffffff;
+        }
+
+        /* Chat messages */
+        .user-message,
+        .bot-message {
+            display: flex;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .user-message {
+            justify-content: flex-end;
+        }
+
+        .bot-message {
+            justify-content: flex-start;
+        }
+
+        .chat-logo {
+            margin: 0 10px;
+            font-size: 25px;
+        }
+
+        .chat-box p {
+            max-width: 70%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .user-message p {
+            text-align: left;
+            background-color: #007bff;
+            color: white;
+        }
+
+        .bot-message p {
+            text-align: left;
+            background-color: #e9ecef;
+            color: #333;
+        }
+
+        .user-message .chat-logo {
+            order: 2;
+        }
+
+        .bot-message .chat-logo {
+            order: 0;
+            /* Place logo before the message */
+        }
+
+        /* Input form styling */
+        #chat-form {
+            display: flex;
+            flex-direction: row;
+            /* Stack input and button vertically */
+            padding: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #chat-form input {
+            width: 90%;
+            /* Full width */
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 14px;
+            margin-bottom: 10px;
+            /* Space between input and button */
+        }
+
+        #chat-form button {
+            height: 39px;
+            width: 5%;
+            /* Full width */
+            padding: 10px;
+            margin-right: 3px;
+            margin-left: 3px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            /* Slightly rounded corners */
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+            /* Center the icon */
+        }
+
+        #chat-form button:hover {
+            background-color: #050e38;
+        }
+
+        @media (max-width: 768px) {
+            .chat-container {
+                width: 90%;
+                padding: 15px;
+            }
+
+            .chat-box {
+                padding: 15px;
+            }
+
+            header h1 {
+                font-size: 16px;
+            }
+
+            header p {
+                font-size: 12px;
+            }
+
+            .chat-box p {
+                font-size: 12px;
+            }
+
+            #chat-form input {
+                padding: auto;
+                font-size: 12px;
+            }
+
+            #chat-form button {
+                width: 70%;
+                font-size: 12px;
+                margin-left: 3px;
+                margin-right: 3px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chat-container">
+        <header>
+            <h1 data-translate="Swasthyafy_AI assistant">
+                <i class="fa-solid fa-stethoscope fa-beat-fade" style="color: #000000;"></i> Swasthyafy AI Assistant
+            </h1>
+            <p id="welcome-message"
+                data-translate="welcome_message"
+                data-name="{{ user_info.name }}"
+                data-age="{{ user_info.age }}"
+                data-gender="{{ user_info.gender }}">
+                Welcome, {{ user_info.name }}! You are {{ user_info.age }} years old and identify as {{ user_info.gender }}.
+            </p>
+        </header>              
+        <div class="chat-box" id="chat-box">
+            {% for message in chat_history %}
+            <div class="{{ 'user-message' if message.role == 'user' else 'bot-message' }}">
+                {% if message.role == 'user' %}
+                <i class="fa-solid fa-user chat-logo" style="color: #2a58a8;"></i>
+                {% else %}
+                <i class="fa-solid fa-user-nurse chat-logo" style="color: #2a58a8;"></i>
+                {% endif %}
+                <p>{{ message.content | safe }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        <form id="chat-form" method="post">
+            <input type="text" name="user_input" id="user_input" placeholder="Describe your symptoms..." data-translate="Describe your symptoms...">
+            <button type="submit">
+                <i class="fa-sharp fa-solid fa-paper-plane"></i>
+                <button type="button" id="mic-button">
+                    <i class="fa-solid fa-microphone" style="color: #ffffff;"></i>
+                </button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const micButton = document.getElementById("mic-button");
+            const userInput = document.getElementById("user_input");
+            const chatBox = document.getElementById("chat-box");
+            const languageSelect = document.getElementById("language-select");
+
+            let selectedLanguage = localStorage.getItem("chatbotLanguage") || "en-US";
+
+            if (!("webkitSpeechRecognition" in window)) {
+                alert("Your browser does not support the Web Speech API. Please use Chrome or another supported browser.");
+                micButton.disabled = true;
+                return;
+            }
+
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = selectedLanguage;
+
+            let isListening = false;
+
+            micButton.addEventListener("click", () => {
+                if (isListening) {
+                    recognition.stop();
+                    micButton.style.backgroundColor = "#007bff";
+                    isListening = false;
+                } else {
+                    recognition.start();
+                    micButton.style.backgroundColor = "#ff4d4d";
+                    isListening = true;
+                }
+            });
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                userInput.value = transcript;
+                micButton.style.backgroundColor = "#007bff";
+                isListening = false;
+            };
+
+            recognition.onerror = (event) => {
+                console.error("Speech recognition error:", event.error);
+                alert("An error occurred while processing your voice. Please try again.");
+                micButton.style.backgroundColor = "#007bff";
+                isListening = false;
+            };
+
+            recognition.onend = () => {
+                micButton.style.backgroundColor = "#007bff";
+                isListening = false;
+            };
+            
+            function speakMessage(text) {
+                if ('speechSynthesis' in window) {
+                    speechSynthesis.cancel(); // Stop any previous speech immediately
+
+                    let utterance = new SpeechSynthesisUtterance(text);
+
+                    // Get the selected language from local storage
+                    let selectedLanguage = localStorage.getItem("chatbotLanguage") || "en";
+
+                    // Map the chatbot's selected language to Speech Synthesis language codes
+                    let langMap = {
+                        "en": "en-US",
+                        "hi": "hi-IN",
+                        "gu": "gu-IN",
+                        "kn": "kn-IN",
+                        "mr": "mr-IN",
+                    };
+
+                    utterance.lang = langMap[selectedLanguage] || "en-US";  // Default to English if not found
+                    utterance.rate = 1.0; // Speed of speech
+                    utterance.pitch = 1.0; // Pitch of speech
+
+                    speechSynthesis.speak(utterance);
+                } else {
+                    console.warn("Text-to-speech not supported in this browser.");
+                }
+            }
+
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    mutation.addedNodes.forEach((node) => {
+                        if (node.classList && node.classList.contains("bot-message")) {
+                            const botText = node.querySelector("p")?.textContent.trim();
+                            if (botText) {
+                                speechSynthesis.cancel();
+                                setTimeout(() => speakMessage(botText), 500);
+                            }
+                        }
+                    });
+                });
+            });
+
+            observer.observe(chatBox, { childList: true, subtree: false });
+
+            document.querySelectorAll(".bot-message p").forEach((msg) => {
+                speakMessage(msg.textContent);
+            });
+
+            // Update language preference when changed
+            languageSelect.addEventListener("change", function () {
+                let newLanguage = this.value;
+                localStorage.setItem("chatbotLanguage", newLanguage);
+                console.log("Updated Language:", newLanguage);
+            });
+        });
+
+            function applyTranslations() {
+                let selectedLang = localStorage.getItem("chatbotLanguage") || "english";
+
+                if (selectedLang !== "english") {
+                    document.querySelectorAll("[data-translate]").forEach(element => {
+                        let key = element.getAttribute("data-translate");
+
+                        if (translations[selectedLang] && translations[selectedLang][key]) {
+                            if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
+                                // If it's an input field, update placeholder
+                                element.placeholder = translations[selectedLang][key];
+                            } else {
+                                // Otherwise, update inner text
+                                element.textContent = translations[selectedLang][key];
+                            }
+                        }
+                    });
+                }
+            }
+    </script>
+
+    <script src="{{ url_for('static', filename='translate.js') }}" defer></script>
+</body>
+
+</html>
